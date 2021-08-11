@@ -8,12 +8,19 @@ class History extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Text('History'),
+        ),
         body: Consumer<Counter>(
             builder: (_, data, __) => ListView.builder(
                   itemCount: data.item.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('${data.item[index]}'),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ListTile(
+                        title: Text('${data.item[index]}'),
+                      ),
                     );
                   },
                 )));

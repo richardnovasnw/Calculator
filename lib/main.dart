@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:useprovider/provider.dart';
-import 'package:useprovider/secondscreen.dart';
+import 'package:useprovider/home_screen.dart';
 
 void main() {
   runApp(
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Second(),
+      home: Home(),
     );
   }
 }
