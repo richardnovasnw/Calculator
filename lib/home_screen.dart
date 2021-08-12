@@ -14,29 +14,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final List<String> buttons = [
-    'C',
-    '+/-',
-    '%',
-    'DEL',
-    '7',
-    '8',
-    '9',
-    '/',
-    '4',
-    '5',
-    '6',
-    'x',
-    '1',
-    '2',
-    '3',
-    '-',
-    '0',
-    '.',
-    '=',
-    '+',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,19 +25,19 @@ class _HomeState extends State<Home> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Calculator"),
+            const Text('Calculator'),
             TextButton(
-              child: Text(
+              child: const Text(
                 'history',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => History(),
-                  ),
-                );
+                print('h');
+                Navigator.push<void>(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const History(),
+                    ));
               },
             ),
           ],
@@ -74,19 +51,19 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     alignment: Alignment.centerRight,
                     child: Text(
-                      context.read<Counter>().userInput,
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      context.watch<Counter>().userInput,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     alignment: Alignment.centerRight,
                     child: Text(
-                      context.read<Counter>().answer,
-                      style: TextStyle(
+                      context.watch<Counter>().answer,
+                      style: const TextStyle(
                           fontSize: 30,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
@@ -97,102 +74,89 @@ class _HomeState extends State<Home> {
           Expanded(
             flex: 3,
             child: Container(
-              child: GridView.builder(
-                  itemCount: buttons.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4),
-                  itemBuilder: (BuildContext context, int index) {
-                    // Clear Button
-                    if (index == 0) {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            context.read<Counter>().userInput = '';
-                            context.read<Counter>().answer = '0';
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color: Colors.white,
-                        textColor: Colors.black,
-                      );
-                    }
+              child: Consumer<Counter>(
+                builder: (_, data, __) => GridView.builder(
+                    itemCount: data.buttons.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4),
+                    itemBuilder: (BuildContext context, int index) {
+                      // Clear Button
+                      if (index == 0) {
+                        return MyButton(
+                          buttontapped: () {
+                            context.read<Counter>().clear();
+                          },
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: Colors.white,
+                          textColor: Colors.black,
+                        );
+                      }
 
-                    // +/- button
-                    else if (index == 1) {
-                      return MyButton(
-                        buttonText: buttons[index],
-                        color: Colors.white,
-                        textColor: Colors.black,
-                      );
-                    }
-                    // % Button
-                    else if (index == 2) {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            context.read<Counter>().userInput += buttons[index];
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color: Colors.white,
-                        textColor: Colors.black,
-                      );
-                    }
-                    // Delete Button
-                    else if (index == 3) {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            context.read<Counter>().userInput = context
-                                .read<Counter>()
-                                .userInput
-                                .substring(
-                                    0,
-                                    context.read<Counter>().userInput.length -
-                                        1);
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color: Colors.white,
-                        textColor: Colors.black,
-                      );
-                    }
-                    // Equal_to Button
-                    else if (index == 18) {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            context.read<Counter>().equalPressed();
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color: Colors.black,
-                        textColor: Colors.white,
-                      );
-                    }
+                      // +/- button
+                      else if (index == 1) {
+                        return MyButton(
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: Colors.white,
+                          textColor: Colors.black,
+                        );
+                      }
+                      // % Button
+                      else if (index == 2) {
+                        return MyButton(
+                          buttontapped: () {
+                            context.read<Counter>().userInput +=
+                                context.read<Counter>().buttons[index];
+                          },
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: Colors.white,
+                          textColor: Colors.black,
+                        );
+                      }
+                      // Delete Button
+                      else if (index == 3) {
+                        return MyButton(
+                          buttontapped: () {
+                            context.read<Counter>().delete();
+                          },
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: Colors.white,
+                          textColor: Colors.black,
+                        );
+                      }
+                      // Equal_to Button
+                      else if (index == 18) {
+                        return MyButton(
+                          buttontapped: () {
+                            context.read<Counter>().equal();
+                          },
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: Colors.black,
+                          textColor: Colors.white,
+                        );
+                      }
 
-                    //  other buttons
-                    else {
-                      return MyButton(
-                        buttontapped: () {
-                          setState(() {
-                            context.read<Counter>().userInput += buttons[index];
-                          });
-                        },
-                        buttonText: buttons[index],
-                        color:
-                            context.read<Counter>().isOperator(buttons[index])
-                                ? Colors.black45
-                                : Colors.white,
-                        textColor:
-                            context.read<Counter>().isOperator(buttons[index])
-                                ? Colors.white
-                                : Colors.black,
-                      );
-                    }
-                  }),
+                      //  other buttons
+                      else {
+                        return MyButton(
+                          buttontapped: () {
+                            data.modify(index);
+                          },
+                          buttonText: context.read<Counter>().buttons[index],
+                          color: context.read<Counter>().isOperator(
+                                  context.read<Counter>().buttons[index])
+                              ? Colors.black45
+                              : Colors.white,
+                          textColor: context.read<Counter>().isOperator(
+                                  context.read<Counter>().buttons[index])
+                              ? Colors.white
+                              : Colors.black,
+                        );
+                      }
+                    }),
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
